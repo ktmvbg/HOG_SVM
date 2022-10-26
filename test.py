@@ -13,6 +13,7 @@ def cal_hog(img):
 tests = []
 labels = []
 
+# Select the last 1000 shapes to test the accuracy of the model
 triangles = os.listdir("./Triangle")[9000:9999]
 squares = os.listdir("./Square")[9000:9999]
 circles = os.listdir("./Circle")[9000:9999]
@@ -20,6 +21,8 @@ circles = os.listdir("./Circle")[9000:9999]
 triangles = [x for x in triangles if x != ".DS_Store"]
 squares = [x for x in squares if x != ".DS_Store"]
 circles = [x for x in circles if x != ".DS_Store"]
+
+# Calculate HOG of each image, save them with the appropriate label
 print("Cal hog triangle")
 for filename in triangles:
     img = io.imread("./Triangle/"+filename)
@@ -45,7 +48,10 @@ for filename in circles:
     tests.append(hist)
     labels.append(-1)
 print("start testing")
+# Load the model
 clf = load("svm_model.dat")
+# Model will predict & label each image based on its HOG (0 for triangles, 1 for squares, -1 for cicles)
+# If labels predicted match the label of the image, the model has made an accurate guess
 res = clf.predict(tests)
 count = 0
 n = 0
